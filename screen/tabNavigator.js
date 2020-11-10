@@ -36,8 +36,8 @@ function TabNavigator(props) {
                     }
 
                     return (
-                        <View style={{ justifyContent: 'center' }}>
-                            <Text style={{ fontSize: 30, color: focused ? 'lightblue' : 'black' }}>{label}</Text>
+                        <View style={{ backgroundColor: focused ? 'lightblue' : 'white', alignSelf: 'stretch', justifyContent: 'center' }}>
+                            <Text style={{ alignSelf: 'center', fontSize: 45, color: focused ? 'gray' : 'black' }}>{label}</Text>
                         </View>
                     );
                 }

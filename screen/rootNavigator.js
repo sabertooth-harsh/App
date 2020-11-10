@@ -33,7 +33,8 @@ const CustomDrawerContentComponent = (props) => {
     );
 }
 
-function RootNavigator() {
+
+function RootNavigator(props) {
     return (
         <MainNavigator.Navigator
             drawerContent={(props) => <CustomDrawerContentComponent {...props} />}
