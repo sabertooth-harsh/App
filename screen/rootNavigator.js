@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { createDrawerNavigator, DrawerItemList } from '@react-navigation/drawer';
 import TabNavigator from './tabNavigator';
+import TabNavigator2 from './tabNavigator2';
 
 const MainNavigator = createDrawerNavigator();
 
@@ -12,9 +13,7 @@ const drawerScreen1 = ({ navigation }) => {
 }
 const drawerScreen2 = ({ navigation }) => {
     return (
-        <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-            <Text style={{ fontSize: 20 }}>You are in Drawer Screen 2</Text>
-        </View>
+        <TabNavigator2 />
     );
 }
 

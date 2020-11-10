@@ -3,19 +3,19 @@ import { View, Text } from 'react-native';
 import { Button } from 'react-native-elements';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
-import TabScreen from './tabScreen';
-import TabScreen2 from './tabScreen2';
+import TabScreen21 from './tabScreen21';
+import TabScreen22 from './tabScreen22';
 
 const Tabs = createBottomTabNavigator();
 
-const tabScreen1 = ({ navigation }) => {
+const tabScreen21 = ({ navigation }) => {
     return (
-        <TabScreen />
+        <TabScreen21 />
     );
 }
-const tabScreen2 = ({ navigation }) => {
+const tabScreen22 = ({ navigation }) => {
     return (
-        <TabScreen2 />
+        <TabScreen22 />
     );
 }
 
@@ -26,11 +26,11 @@ function TabNavigator(props) {
                 tabBarLabel: ({ focused, color, size }) => {
                     let label;
                     switch (route.name) {
-                        case 'home':
-                            label = 'Home';
+                        case 'settings':
+                            label = 'Settings';
                             break;
-                        case 'contacts':
-                            label = 'Contacts';
+                        case 'about':
+                            label = 'About';
                             break;
                         default:
                             label = 'Default';
@@ -54,12 +54,12 @@ function TabNavigator(props) {
             }}
         >
             <Tabs.Screen
-                name='home'
-                component={tabScreen1}
+                name='settings'
+                component={tabScreen22}
             />
             <Tabs.Screen
-                name='contacts'
-                component={tabScreen2}
+                name='about'
+                component={tabScreen21}
             />
         </Tabs.Navigator>
     );
