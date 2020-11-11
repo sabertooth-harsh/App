@@ -4,19 +4,6 @@ import { createDrawerNavigator, DrawerItemList } from '@react-navigation/drawer'
 import TabNavigator from './tabNavigator';
 import TabNavigator2 from './tabNavigator2';
 
-const MainNavigator = createDrawerNavigator();
-
-const drawerScreen1 = ({ navigation }) => {
-    return (
-        <TabNavigator />
-    );
-}
-const drawerScreen2 = ({ navigation }) => {
-    return (
-        <TabNavigator2 />
-    );
-}
-
 const CustomDrawerContentComponent = (props) => {
     return (
         <ScrollView {...props}>
@@ -35,26 +22,7 @@ const CustomDrawerContentComponent = (props) => {
 
 function RootNavigator(props) {
     return (
-        <MainNavigator.Navigator
-            drawerContent={(props) => <CustomDrawerContentComponent {...props} />}
-        >
-            <MainNavigator.Screen
-                name='drawerScreen1'
-                key='drawer1'
-                component={drawerScreen1}
-                options={{
-                    title: 'Drawer Screen 1'
-                }}
-            />
-            <MainNavigator.Screen
-                name='drawerScreen2'
-                key='drawer2'
-                component={drawerScreen2}
-                options={{
-                    title: 'Drawer Screen 2'
-                }}
-            />
-        </MainNavigator.Navigator>
+        <TabNavigator />
     );
 }
 
