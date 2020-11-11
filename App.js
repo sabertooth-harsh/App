@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import Main from './components/main';
+import Main from './src/components/Main';
 import { NavigationContainer } from '@react-navigation/native';
 
 function App() {

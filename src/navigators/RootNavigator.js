@@ -3,23 +3,23 @@ import { View, Text } from 'react-native';
 import { Button } from 'react-native-elements';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
-import TabScreen from './tabScreen';
-import TabScreen2 from './tabScreen2';
+import ContactsTabNavigator from './ContactsTabNavigator';
+import HomeTabNavigator from './HomeTabNavigator';
 
 const Tabs = createBottomTabNavigator();
 
-const tabScreen1 = ({ navigation }) => {
+const homeTabScreen = ({ navigation }) => {
     return (
-        <TabScreen />
+        <HomeTabNavigator />
     );
 }
-const tabScreen2 = ({ navigation }) => {
+const contactsTabScreen = ({ navigation }) => {
     return (
-        <TabScreen2 />
+        <ContactsTabNavigator />
     );
 }
 
-function TabNavigator(props) {
+function RootNavigator(props) {
     return (
         <Tabs.Navigator
             screenOptions={({ route }) => ({
@@ -55,14 +55,14 @@ function TabNavigator(props) {
         >
             <Tabs.Screen
                 name='home'
-                component={tabScreen1}
+                component={homeTabScreen}
             />
             <Tabs.Screen
                 name='contacts'
-                component={tabScreen2}
+                component={contactsTabScreen}
             />
         </Tabs.Navigator>
     );
 }
 
-export default TabNavigator;
+export default RootNavigator;
