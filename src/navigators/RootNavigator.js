@@ -1,68 +1,59 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { Button } from 'react-native-elements';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useNavigation } from '@react-navigation/native';
-import ContactsTabNavigator from './ContactsTabNavigator';
-import HomeTabNavigator from './HomeTabNavigator';
+import { createStackNavigator } from '@react-navigation/stack';
 
-const Tabs = createBottomTabNavigator();
+import SplashScreen from '../screen/SplashScreen';
+import AuthNavigator from './AuthNavigator';
+import MainNavigator from './MainNavigator';
 
-const homeTabScreen = ({ navigation }) => {
+const Root = createStackNavigator();
+
+const splashScreen = ({ navigation }) => {
     return (
-        <HomeTabNavigator />
+        <SplashScreen />
     );
 }
-const contactsTabScreen = ({ navigation }) => {
+const authScreen = ({ navigation }) => {
     return (
-        <ContactsTabNavigator />
+        <AuthNavigator />
+    );
+}
+const mainScreen = ({ route, navigation }) => {
+    const email = route.params;
+    console.log('email in mainscreen', email);
+    return (
+        <MainNavigator email={email} />
     );
 }
 
-function RootNavigator(props) {
+const RootNavigator = (props) => {
+
     return (
-        <Tabs.Navigator
-            screenOptions={({ route }) => ({
-                tabBarLabel: ({ focused, color, size }) => {
-                    let label;
-                    switch (route.name) {
-                        case 'home':
-                            label = 'Home';
-                            break;
-                        case 'contacts':
-                            label = 'Contacts';
-                            break;
-                        default:
-                            label = 'Default';
-                    }
-
-                    return (
-                        <View style={{ backgroundColor: focused ? 'lightblue' : 'white', alignSelf: 'stretch', justifyContent: 'center' }}>
-                            <Text style={{ alignSelf: 'center', fontSize: 45, color: focused ? 'gray' : 'black' }}>{label}</Text>
-                        </View>
-                    );
-                }
-            })}
-
-            tabBarOptions={{
-                activeTintColor: 'green',
-                inactiveTintColor: 'gray',
-                style: {
-                    borderTopWidth: 1,
-                    paddingTop: 5,
-                }
-            }}
-        >
-            <Tabs.Screen
-                name='home'
-                component={homeTabScreen}
+        <Root.Navigator>
+            <Root.Screen
+                name='splash'
+                component={splashScreen}
+                options={{
+                    headerShown: false
+                }}
             />
-            <Tabs.Screen
-                name='contacts'
-                component={contactsTabScreen}
+            <Root.Screen
+                name='auth'
+                component={authScreen}
+                options={{
+                    headerShown: false
+                }}
             />
-        </Tabs.Navigator>
+            <Root.Screen
+                name='main'
+                component={mainScreen}
+                options={{
+                    headerShown: false
+                }}
+            />
+        </Root.Navigator>
     );
 }
+
 
 export default RootNavigator;

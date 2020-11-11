@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { Button, Header } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 import { createDrawerNavigator, DrawerItemList } from '@react-navigation/drawer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomeTabDrawer = createDrawerNavigator();
 
@@ -43,7 +44,31 @@ const passbookScreen = ({ navigation }) => {
 
 function HomeTabNavigator(props) {
 
+    /*const [email, setEmail] = useState('');
+    const [name, setName] = useState('');
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            await AsyncStorage.getItem('users')
+                .then((response) => {
+                    const userArray = JSON.parse(response);
+                    if (userArray !== null) {
+                        const currentUser = userArray.find((user) => user.email === props);
+                        currentUser === null ? console.log("User not present") : (currentUser) => {
+                            setEmail(currentUser.email);
+                            setName(currentUser.name);
+                        };
+                    }
+                    else
+                        console.log('No users present');
+                })
+                .catch((err) => console.log(err));
+        }
+    }, []);
+
     const navigation = useNavigation();
+
+    console.log(props); */
 
     return (
 
