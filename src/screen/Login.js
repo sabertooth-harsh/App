@@ -17,12 +17,21 @@ const Login = (props) => {
     const [otp, setOtp] = useState('');
 
     const handleLogin = async () => {
+        const handleLoggedUserFound = async (currentUser) => {
+            await AsyncStorage.setItem('loggedUser', currentUser.email)
+                .then((res) => console.log('setLoggedUser', res))
+                .catch((err) => console.log(err));
+
+            navigation.replace('splash');
+        }
+
         await AsyncStorage.getItem('users')
             .then((response) => {
                 const userArray = JSON.parse(response);
                 if (userArray !== null) {
                     const currentUser = userArray.find((user) => user.email === email && user.otp === otp);
-                    currentUser === null ? console.log("User not present") : navigation.replace('main', email);
+                    console.log('email', email, 'currentUser', currentUser);
+                    currentUser === null || typeof (currentUser) === 'undefined' ? console.log("User not present") : handleLoggedUserFound(currentUser);
                 }
                 else
                     console.log('No users present');

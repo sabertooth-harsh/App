@@ -10,18 +10,16 @@ const SplashScreen = (props) => {
 
     useEffect(() => {
         const fetchUserData = async () => {
-            await AsyncStorage.getItem('loggedUser')
-                .then((email) => {
-                    navigation.replace(email === null ? 'auth' : 'main', email);
-                })
-                .catch((err) => console.log(err));
+            const email = await AsyncStorage.getItem('loggedUser');
+            console.log(email);
+            navigation.navigate(email === null ? 'auth' : 'main', email);
         }
 
         setTimeout(() => {
             setAnimating(false);
 
             fetchUserData();
-        }, 5000);
+        }, 1000);
     }, []);
 
     return (
