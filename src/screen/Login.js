@@ -32,7 +32,7 @@ const Login = (props) => {
                 if (userArray !== null) {
                     const currentUser = Object.values(userArray).find((user) => user.email === email && user.otp === otp);
                     console.log('email', email, 'currentUser', currentUser);
-                    currentUser === null || typeof (currentUser) === 'undefined' ? console.log("User not present") : handleLoggedUserFound(currentUser);
+                    currentUser === null || typeof (currentUser) === 'undefined' ? console.log("User not present", userArray) : handleLoggedUserFound(currentUser);
                 }
                 else
                     console.log('No users present');

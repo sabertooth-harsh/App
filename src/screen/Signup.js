@@ -23,7 +23,7 @@ const Signup = (props) => {
                     const users = JSON.parse(response);
                     users === null ? setId(0) : setId(users.length);
                     console.log('users: ', users);
-                    setUserList(...users);
+                    setUserList(users);
                     console.log('userList: ', userList);
                 })
                 .catch((err) => console.log(err));
@@ -40,16 +40,14 @@ const Signup = (props) => {
             otp: otp
         };
 
-        let newList = { ...userList };
-        newList = { ...newList, tempUserList };
-
-        console.log(newList);
+        setUserList(userList.push(tempUserList));
+        console.log(userList);
 
         await AsyncStorage.removeItem('users')
             .then(() => console.log('Old list removed'))
             .catch((err) => console.log(err));
 
-        await AsyncStorage.setItem('users', JSON.stringify(newList))
+        await AsyncStorage.setItem('users', JSON.stringify(userList))
             .then(() => console.log('New User Successfully Added'))
             .then(() => navigation.goBack())
             .catch((err) => console.log(err));
