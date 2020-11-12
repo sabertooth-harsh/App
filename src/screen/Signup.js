@@ -10,13 +10,21 @@ const Signup = (props) => {
     const navigation = useNavigation();
 
     const [id, setId] = useState(0);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [otp, setOtp] = useState('');
+
+    const [userList, setUserList] = useState([]);
 
     useEffect(() => {
         const fetchUsers = async () => {
-            await AsyncStorage.getItem('user')
+            await AsyncStorage.getItem('users')
                 .then((response) => {
-                    const userArray = Object.values(JSON.stringify(response));
-                    userArray === null ? setId(0) : setId(userArray.length);
+                    const users = JSON.parse(response);
+                    users === null ? setId(0) : setId(users.length);
+                    console.log('users: ', users);
+                    setUserList(...users);
+                    console.log('userList: ', userList);
                 })
                 .catch((err) => console.log(err));
         }
@@ -24,13 +32,27 @@ const Signup = (props) => {
         fetchUsers();
     }, []);
 
-    const [userInfo = {
-        id, name, email, pwd
-    }, setUser] = useState(id, '', '', '');
-    const users = [userInfo];
+    const handleSubmit = async () => {
+        const tempUserList = {
+            id: id,
+            name: name,
+            email: email,
+            otp: otp
+        };
 
-    const handleSubmit = () => {
+        let newList = { ...userList };
+        newList = { ...newList, tempUserList };
 
+        console.log(newList);
+
+        await AsyncStorage.removeItem('users')
+            .then(() => console.log('Old list removed'))
+            .catch((err) => console.log(err));
+
+        await AsyncStorage.setItem('users', JSON.stringify(newList))
+            .then(() => console.log('New User Successfully Added'))
+            .then(() => navigation.goBack())
+            .catch((err) => console.log(err));
     }
 
     return (
@@ -49,18 +71,18 @@ const Signup = (props) => {
                     <Card.Divider />
                     <Input
                         placeholder='Name'
-                        value={userInfo.name}
-                        onChangeText={(value) => setUser(userInfo.id, value, userInfo.email, userInfo.pwd)}
+                        value={name}
+                        onChangeText={(value) => setName(value)}
                     />
                     <Input
                         placeholder='Email'
-                        value={userInfo.email}
-                        onChangeText={(value) => setUser(userInfo.id, userInfo.name, value, userInfo.pwd)}
+                        value={email}
+                        onChangeText={(value) => setEmail(value)}
                     />
                     <Input
-                        placeholder='Password'
-                        value={userInfo.pwd}
-                        onChangeText={(value) => setUser(userInfo.id, userInfo.name, userInfo.email, value)}
+                        placeholder='OTP'
+                        value={otp}
+                        onChangeText={(value) => setOtp(value)}
                     />
                     <Button
                         title='Sign Up'

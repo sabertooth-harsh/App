@@ -28,8 +28,9 @@ const Login = (props) => {
         await AsyncStorage.getItem('users')
             .then((response) => {
                 const userArray = JSON.parse(response);
+                console.log('response', userArray);
                 if (userArray !== null) {
-                    const currentUser = userArray.find((user) => user.email === email && user.otp === otp);
+                    const currentUser = Object.values(userArray).find((user) => user.email === email && user.otp === otp);
                     console.log('email', email, 'currentUser', currentUser);
                     currentUser === null || typeof (currentUser) === 'undefined' ? console.log("User not present") : handleLoggedUserFound(currentUser);
                 }
