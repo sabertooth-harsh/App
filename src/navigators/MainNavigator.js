@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
-import { Button, Header } from 'react-native-elements';
+import { Button, Header, Icon } from 'react-native-elements';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import ContactsTabNavigator from './ContactsTabNavigator';
@@ -38,47 +38,27 @@ function MainNavigator(props) {
 
     return (
         <View style={{ flex: 1 }}>
-            <Header
-                rightComponent={<Button
-                    title='Sign Out'
-                    onPress={async () => {
-                        await AsyncStorage.removeItem('loggedUser')
-                            .then(() => navigation.navigate('auth'))
-                            .catch((err) => console.log(err));
-                    }}
-                />}
-            />
             <Tabs.Navigator
                 screenOptions={({ route }) => ({
                     tabBarLabel: ({ focused, color, size }) => {
-                        let label;
+                        let icon;
                         switch (route.name) {
                             case 'home':
-                                label = 'Home';
+                                icon = <Icon name='home' type='font-awesome' size={48} color={focused ? 'white' : 'gray'} />
                                 break;
+
                             case 'contacts':
-                                label = 'Contacts';
+                                icon = <Icon name='address-book' type='font-awesome' size={48} color={focused ? 'white' : 'gray'} />
                                 break;
-                            default:
-                                label = 'Default';
                         }
 
                         return (
                             <View style={{ backgroundColor: focused ? 'lightblue' : 'white', alignSelf: 'stretch', justifyContent: 'center' }}>
-                                <Text style={{ alignSelf: 'center', fontSize: 45, color: focused ? 'gray' : 'black' }}>{label}</Text>
+                                {icon}
                             </View>
                         );
                     }
                 })}
-
-                tabBarOptions={{
-                    activeTintColor: 'green',
-                    inactiveTintColor: 'gray',
-                    style: {
-                        borderTopWidth: 1,
-                        paddingTop: 5,
-                    }
-                }}
             >
                 <Tabs.Screen
                     name='home'
@@ -89,7 +69,7 @@ function MainNavigator(props) {
                     component={contactsTabScreen}
                 />
             </Tabs.Navigator>
-        </View>
+        </View >
     );
 }
 

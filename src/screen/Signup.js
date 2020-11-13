@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Dimensions } from 'react-native';
+import { View, Text, Dimensions, TextInput, Alert } from 'react-native';
 import { Button, Card, Input, Header, Icon } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -13,6 +13,9 @@ const Signup = (props) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [otp, setOtp] = useState('');
+    const [nameError, setNameError] = useState(null);
+    const [emailError, setEmailError] = useState(null);
+    const [otpError, setOtpError] = useState(null);
 
     const [userList, setUserList] = useState([]);
 
@@ -32,7 +35,53 @@ const Signup = (props) => {
         fetchUsers();
     }, []);
 
+    const validateForm = () => {
+        let noErr = true;
+
+        let patt = new RegExp('@');
+        if (!patt.test(email)) {
+            setEmailError('Invalid email, must contain @');
+            noErr = false;
+        }
+        if (email.length < 1) {
+            setEmailError('No email entered');
+            noErr = false;
+        }
+
+        if (name.length < 1) {
+            setNameError('No name entered');
+            noErr = false;
+        }
+
+        if (otp.length < 4 || otp.length > 4) {
+            setOtp('');
+            setOtpError("OTP must be of 4 characters");
+            noErr = false;
+        }
+
+
+        if (userList.find((user) => user.email === email)) {
+            Alert.alert(
+                'User Already Present',
+                'This email is already registered, please Login.',
+                [
+                    {
+                        text: 'OK'
+                    }
+                ]
+            );
+            setEmail('');
+            noErr = false;
+            return;
+        }
+
+        return !noErr;
+    }
+
     const handleSubmit = async () => {
+        if (validateForm())
+            return;
+
         const tempUserList = {
             id: id,
             name: name,
@@ -71,20 +120,37 @@ const Signup = (props) => {
                         placeholder='Name'
                         value={name}
                         onChangeText={(value) => setName(value)}
+                        errorMessage={nameError}
                     />
                     <Input
                         placeholder='Email'
                         value={email}
                         onChangeText={(value) => setEmail(value)}
+                        errorMessage={emailError}
+                        onBlur={() => {
+                            let patt = new RegExp('@');
+                            if (!patt.test(email)) {
+                                setEmailError('Invalid email, must contain @');
+                            }
+                        }}
                     />
                     <Input
+                        keyboardType='number-pad'
                         placeholder='OTP'
                         value={otp}
+                        onBlur={() => {
+                            if (otp.length < 4 || otp.length > 4) {
+                                setOtp('');
+                                setOtpError("OTP must be of 4 characters");
+                            }
+                        }}
                         onChangeText={(value) => setOtp(value)}
+                        errorMessage={otpError}
                     />
                     <Button
                         title='Sign Up'
                         onPress={() => handleSubmit()}
+                        error={emailError}
                     />
                     <Card.Divider />
                 </Card>

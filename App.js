@@ -12,7 +12,7 @@ function App() {
       {
         id: 0,
         name: 'demo',
-        email: 'demo',
+        email: 'demo@demo',
         otp: '1234'
       }
     ]

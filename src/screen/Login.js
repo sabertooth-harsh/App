@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Dimensions } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { View, Text, Dimensions, Alert } from 'react-native';
 import { Button, Card, Input, Header } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -15,8 +14,50 @@ const Login = (props) => {
     const [otpSent, setOtpSent] = useState(false);
     const [email, setEmail] = useState('');
     const [otp, setOtp] = useState('');
+    const [otpError, setOtpError] = useState('');
+    const [emailError, setEmailError] = useState('');
+
+    const validateForm = () => {
+        let noErr = true;
+
+        let patt = new RegExp('@');
+        if (!patt.test(email)) {
+            setEmailError('Invalid email, must contain @');
+            noErr = false;
+        }
+        if (email.length < 1) {
+            setEmailError('No email entered');
+            noErr = false;
+        }
+
+        if (otp.length < 4 || otp.length > 4) {
+            setOtp('');
+            setOtpError("OTP must be of 4 characters");
+            noErr = false;
+        }
+
+        const matchOtp = async () => {
+            await AsyncStorage.getItem('users')
+                .then((res) => {
+                    const users = JSON.parse(res);
+                    const user = users.find((user) => user.email === email);
+                    if (user.otp !== otp) {
+                        setOtpError('Invalid Otp');
+                        noErr = false;
+                    }
+                })
+                .catch((err) => console.log(err));
+        }
+
+        matchOtp();
+
+        return !noErr;
+    }
 
     const handleLogin = async () => {
+        if (validateForm())
+            return;
+
         const handleLoggedUserFound = async (currentUser) => {
             await AsyncStorage.setItem('loggedUser', currentUser.email)
                 .then((res) => console.log('setLoggedUser', res))
@@ -53,12 +94,27 @@ const Login = (props) => {
                         placeholder='Email'
                         value={email}
                         onChangeText={(value) => setEmail(value)}
+                        onBlur={() => {
+                            let patt = new RegExp('@');
+                            if (!patt.test(email)) {
+                                setEmailError('Invalid email, must contain @');
+                            }
+                        }}
+                        errorMessage={emailError}
                     />
                     {otpSent ? <View>
                         <Input
+                            keyboardType='number-pad'
                             placeholder='Enter OTP here'
                             value={otp}
                             onChangeText={(value) => setOtp(value)}
+                            onBlur={() => {
+                                if (otp.length < 4 || otp.length > 4) {
+                                    setOtpError('OTP must be of 4 numbers');
+                                    setOtp('');
+                                }
+                            }}
+                            errorMessage={otpError}
                         />
                         <Button
                             title='Log In'
@@ -70,7 +126,26 @@ const Login = (props) => {
                             }}
                             titleStyle={{ fontSize: 15 }}
                             title='Send OTP'
-                            onPress={() => setOtpSent(true)}
+                            onPress={async () => {
+                                await AsyncStorage.getItem('users')
+                                    .then((res) => {
+                                        const users = JSON.parse(res);
+                                        if (users.find((user) => user.email === email))
+                                            setOtpSent(true);
+                                        else {
+                                            Alert.alert(
+                                                'User Not Found',
+                                                'No user found with this email!',
+                                                [
+                                                    {
+                                                        text: 'OK'
+                                                    }
+                                                ]
+                                            );
+                                        }
+                                    })
+                                    .catch((err) => console.log(err));
+                            }}
                         />}
                     <Card.Divider />
                     <View style={{ flexDirection: 'row' }}>

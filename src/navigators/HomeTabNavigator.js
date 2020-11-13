@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
-import { Button, Header } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { Button, Header, Icon } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { createDrawerNavigator, DrawerItemList } from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -10,39 +9,73 @@ const HomeTabDrawer = createDrawerNavigator();
 
 const CustomDrawerContentComponent = (props) => {
     return (
-        <ScrollView {...props}>
-            <View style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
-                <View style={styles.drawerHeader}>
-                    <View style={{ flex: 1, alignItems: "center" }}>
-                        <Text style={styles.drawerHeaderText}>Home</Text>
+        <View style={{ flex: 1 }}>
+            <ScrollView {...props}>
+                <View style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
+                    <View style={styles.drawerHeader}>
+                        <View style={{ flex: 1, alignItems: "center" }}>
+                            <Text style={styles.drawerHeaderText}>Home</Text>
+                        </View>
                     </View>
+                    <DrawerItemList {...props} />
                 </View>
-                <DrawerItemList {...props} />
+            </ScrollView>
+            <View style={{
+                flex: 1,
+                marginTop: 420,
+                borderTopWidth: 1,
+                borderRadius: 20
+            }}>
+                <Button
+                    buttonStyle={{
+                        backgroundColor: 'white'
+                    }}
+                    title='Sign Out'
+                    titleStyle={{
+                        color: 'gray'
+                    }}
+                    onPress={async () => {
+                        await AsyncStorage.removeItem('loggedUser')
+                            .then(() => props.navigation.navigate('auth'))
+                            .catch((err) => console.log(err));
+                    }}
+                />
             </View>
-        </ScrollView>
+        </View>
     );
 }
 
 const walletScreen = ({ navigation }) => {
 
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ fontSize: 30 }}>This is your wallet</Text>
-            <Icon name='trash' />
+        <View style={{ flex: 1 }}>
+            <Header
+                leftComponent={<Icon name='menu' color='white' size={35} onPress={() => navigation.toggleDrawer()} />}
+                centerComponent={<Text style={{ fontSize: 40, fontFamily: 'monospace', color: 'white' }}>Wallet</Text>}
+            />
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{ fontSize: 30 }}>This is your wallet</Text>
+            </View>
         </View>
     );
 }
 const passbookScreen = ({ navigation }) => {
 
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ fontSize: 30 }}>This is your Passbook</Text>
-            <Icon name='trash' />
+        <View style={{ flex: 1 }}>
+            <Header
+                leftComponent={<Icon name='menu' color='white' size={35} onPress={() => navigation.toggleDrawer()} />}
+                centerComponent={<Text style={{ fontSize: 40, fontFamily: 'monospace', color: 'white' }}>Passbook</Text>}
+            />
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{ fontSize: 30 }}>This is your Passbook</Text>
+            </View>
         </View>
     );
 }
 
 function HomeTabNavigator(props) {
+    const navigation = useNavigation();
 
     /*const [email, setEmail] = useState('');
     const [name, setName] = useState('');
@@ -74,7 +107,10 @@ function HomeTabNavigator(props) {
 
         <HomeTabDrawer.Navigator
             style={{ marginTop: 40 }}
-            drawerContent={(props) => <CustomDrawerContentComponent {...props} />}
+            drawerContent={(props) => <CustomDrawerContentComponent {...props} navigation={navigation} />}
+            screenOptions={{
+                headerShown: false
+            }}
         >
             <HomeTabDrawer.Screen
                 name='Wallet'
