@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Dimensions, TextInput, Alert } from 'react-native';
+import { ScrollView, View, Text, Dimensions, TextInput, Alert } from 'react-native';
 import { Button, Card, Input, Header, Icon } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -108,28 +108,37 @@ const Signup = (props) => {
     }
 
     return (
-        <View style={{ flex: 1, alignItems: 'center' }}>
+        <View style={{ flex: 1 }}>
             <Header
                 {...props}
                 containerStyle={{ backgroundColor: 'white' }}
-                leftComponent={<Icon name='arrow-left' type='font-awesome' onPress={() => navigation.goBack()} />}
+                leftComponent={<Icon color='#2dd1eb' name='angle-left' size={30} type='font-awesome' onPress={() => navigation.goBack()} />}
             />
-            <View style={{ flex: 2, heigth: 500, width: SCREEN_WIDTH, backgroundColor: 'blue', justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{ flex: 1, width: SCREEN_WIDTH, backgroundColor: '#2dd1eb', justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={{ color: 'white', fontSize: 40, fontFamily: 'courier' }}>New User? Sign Up</Text>
             </View>
-            <View>
-                <Card containerStyle={{ marginTop: 'auto', width: SCREEN_WIDTH }}>
-                    <Card.Title style={{ fontSize: 30 }}>Sign Up</Card.Title>
-                    <Card.Divider />
+            <View style={{ flex: 1 }}>
+                <View style={{ justifyContent: 'center', alignItems: 'center', borderBottomWidth: 1, padding: 7, borderRadius: 20 }}>
+                    <Text style={{ fontSize: 40, fontFamily: 'courier' }}>Sign Up</Text>
+                </View>
+                <ScrollView style={{ flex: 1, padding: 10 }} indicatorStyle='black'>
                     <Input
+                        style={{ margin: 5 }}
                         placeholder='Name'
                         value={name}
+                        inputStyle={{
+                            fontFamily: 'monospace'
+                        }}
                         onChangeText={(value) => setName(value)}
                         errorMessage={nameError}
                     />
                     <Input
+                        style={{ margin: 5 }}
                         placeholder='Email'
                         value={email}
+                        inputStyle={{
+                            fontFamily: 'monospace'
+                        }}
                         onChangeText={(value) => setEmail(value)}
                         errorMessage={emailError}
                         onBlur={() => {
@@ -140,8 +149,12 @@ const Signup = (props) => {
                         }}
                     />
                     <Input
+                        style={{ margin: 5 }}
                         keyboardType='number-pad'
                         placeholder='OTP'
+                        inputStyle={{
+                            fontFamily: 'monospace'
+                        }}
                         value={otp}
                         maxLength={4}
                         onBlur={() => {
@@ -160,12 +173,22 @@ const Signup = (props) => {
                         errorMessage={otpError}
                     />
                     <Button
+                        buttonStyle={{
+                            alignSelf: 'center',
+                            width: 300,
+                            borderRadius: 0,
+                            height: 60,
+                            backgroundColor: '#2dd1eb'
+                        }}
+                        titleStyle={{
+                            fontFamily: 'monospace',
+                            fontSize: 30,
+                        }}
                         title='Sign Up'
                         onPress={() => handleSubmit()}
                         error={emailError}
                     />
-                    <Card.Divider />
-                </Card>
+                </ScrollView>
             </View>
         </View>
     );

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { SafeAreaView, View, Text, ScrollView, StyleSheet, Dimensions } from 'react-native';
 import { Button, Header, Icon } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { createDrawerNavigator, DrawerItemList } from '@react-navigation/drawer';
@@ -10,7 +10,7 @@ const HomeTabDrawer = createDrawerNavigator();
 const CustomDrawerContentComponent = (props) => {
     return (
         <View style={{ flex: 1 }}>
-            <ScrollView {...props}>
+            <ScrollView style={{ flex: 1 }} {...props}>
                 <View style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
                     <View style={styles.drawerHeader}>
                         <View style={{ flex: 1, alignItems: "center" }}>
@@ -19,28 +19,26 @@ const CustomDrawerContentComponent = (props) => {
                     </View>
                     <DrawerItemList {...props} />
                 </View>
+                <View style={{ marginTop: Dimensions.get('window').width }}>
+                    <Button
+                        buttonStyle={{
+                            borderTopWidth: 1,
+                            borderTopColor: 'black',
+                            borderRadius: 20,
+                            backgroundColor: 'white',
+                        }}
+                        title='Sign Out'
+                        titleStyle={{
+                            color: 'gray'
+                        }}
+                        onPress={async () => {
+                            await AsyncStorage.removeItem('loggedUser')
+                                .then(() => props.navigation.navigate('auth'))
+                                .catch((err) => console.log(err));
+                        }}
+                    />
+                </View>
             </ScrollView>
-            <View style={{
-                flex: 1,
-                marginTop: 420,
-                borderTopWidth: 1,
-                borderRadius: 20
-            }}>
-                <Button
-                    buttonStyle={{
-                        backgroundColor: 'white'
-                    }}
-                    title='Sign Out'
-                    titleStyle={{
-                        color: 'gray'
-                    }}
-                    onPress={async () => {
-                        await AsyncStorage.removeItem('loggedUser')
-                            .then(() => props.navigation.navigate('auth'))
-                            .catch((err) => console.log(err));
-                    }}
-                />
-            </View>
         </View>
     );
 }
@@ -76,32 +74,6 @@ const passbookScreen = ({ navigation }) => {
 
 function HomeTabNavigator(props) {
     const navigation = useNavigation();
-
-    /*const [email, setEmail] = useState('');
-    const [name, setName] = useState('');
-
-    useEffect(() => {
-        const fetchUser = async () => {
-            await AsyncStorage.getItem('users')
-                .then((response) => {
-                    const userArray = JSON.parse(response);
-                    if (userArray !== null) {
-                        const currentUser = userArray.find((user) => user.email === props);
-                        currentUser === null ? console.log("User not present") : (currentUser) => {
-                            setEmail(currentUser.email);
-                            setName(currentUser.name);
-                        };
-                    }
-                    else
-                        console.log('No users present');
-                })
-                .catch((err) => console.log(err));
-        }
-    }, []);
-
-    const navigation = useNavigation();
-
-    console.log(props); */
 
     return (
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Dimensions, Alert, TextInput } from 'react-native';
-import { Button, Card, Input, Header } from 'react-native-elements';
+import { ScrollView, View, Text, Dimensions, Alert, TextInput, StyleSheet } from 'react-native';
+import { Button, Card, Input, Header, Icon } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -86,36 +86,40 @@ const Login = (props) => {
     }
 
     return (
-        <View style={{ flex: 1, alignItems: 'center' }}>
-            <View style={{ flex: 2, heigth: 500, width: SCREEN_WIDTH, backgroundColor: 'blue', justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ flex: 1 }}>
+            <View style={{ flex: 6, width: SCREEN_WIDTH, backgroundColor: '#2dd1eb', justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={{ color: 'white', fontSize: 40, fontFamily: 'courier' }}>Welcome Again!</Text>
             </View>
-            <View>
-                <Card containerStyle={{ marginTop: 'auto', width: SCREEN_WIDTH }}>
-                    <Card.Title style={{ fontSize: 30 }}>Log In</Card.Title>
-                    <Card.Divider />
-                    <Input
-                        placeholder='Email'
-                        value={email}
-                        onChangeText={(value) => setEmail(value)}
-                        onBlur={() => {
-                            let patt = new RegExp('@');
-                            if (!patt.test(email)) {
-                                setEmailError('Invalid email, must contain @');
-                            }
-                            else
-                                setEmailError('');
+            {otpSent ?
+                <View style={{ alignItems: 'center', justifyContent: 'center', borderBottomWidth: 1, padding: 7, borderRadius: 20, flexDirection: 'row' }}>
+                    <Icon
+                        name='arrow-left' type='font-awesome'
+                        containerStyle={{ marginRight: 'auto', justifyContent: 'center' }}
+                        onPress={() => {
+                            setOtpError('');
+                            setOtpSent(false);
                         }}
-                        errorMessage={emailError}
                     />
-                    {otpSent ? <View>
-                        <Input
-                            keyboardType='numeric'
-                            placeholder='Enter OTP here'
-                            value={otp}
-                            maxLength={4}
-                            onChangeText={(value) => setOtp(value)}
-                            onBlur={() => {
+                    <Text style={{ marginRight: 'auto', fontSize: 40, fontFamily: 'courier' }}>Enter the OTP</Text>
+                </View> : <View style={{ justifyContent: 'center', alignItems: 'center', borderBottomWidth: 1, padding: 7, borderRadius: 20 }}>
+                    <Text style={{ fontSize: 40, fontFamily: 'courier' }}>Log In</Text>
+                </View>
+            }
+            <View style={{ flex: 1, flexDirection: 'row', padding: 10 }}>
+                {otpSent ?
+                    <Input
+                        containerStyle={{ width: Dimensions.get('window').width - 100 }}
+                        style={{ margin: 5 }}
+                        keyboardType='numeric'
+                        placeholder='Enter OTP here'
+                        value={otp}
+                        maxLength={4}
+                        inputStyle={{
+                            fontFamily: 'monospace'
+                        }}
+                        onChangeText={(value) => setOtp(value)}
+                        onBlur={() => {
+                            if (otp.length > 0) {
                                 let patt = /^[0-9]+$/;
                                 if (!patt.test(otp)) {
                                     setOtpError('OTP can only be numeric');
@@ -125,55 +129,65 @@ const Login = (props) => {
                                 }
                                 else
                                     setOtpError('');
-                            }}
-                            errorMessage={otpError}
-                        />
-                        <Button
-                            title='Log In'
-                            onPress={() => handleLogin()}
-                        />
-                    </View> : <Button
-                            containerStyle={{
-                                marginLeft: 20,
-                            }}
-                            titleStyle={{ fontSize: 15 }}
-                            title='Send OTP'
-                            onPress={async () => {
-                                await AsyncStorage.getItem('users')
-                                    .then((res) => {
-                                        const users = JSON.parse(res);
-                                        if (users.find((user) => user.email === email))
-                                            setOtpSent(true);
-                                        else {
-                                            Alert.alert(
-                                                'User Not Found',
-                                                'No user found with this email!',
-                                                [
-                                                    {
-                                                        text: 'OK'
-                                                    }
-                                                ]
-                                            );
-                                        }
-                                    })
-                                    .catch((err) => console.log(err));
-                            }}
-                        />}
-                    <Card.Divider />
-                    <View style={{ flexDirection: 'row' }}>
-                        <View style={{ justifyContent: 'center' }}>
-                            <Text style={{ fontSize: 20 }}>Don't have an account?</Text>
-                        </View>
-                        <Button
-                            containerStyle={{
-                                marginLeft: 20,
-                            }}
-                            titleStyle={{ fontSize: 15 }}
-                            title='Sign Up'
-                            onPress={() => navigation.navigate('signup')}
-                        />
-                    </View>
-                </Card>
+                            }
+                        }}
+                        errorMessage={otpError}
+                    /> :
+                    <Input
+                        containerStyle={{ width: Dimensions.get('window').width - 100 }}
+                        style={{ margin: 5 }}
+                        placeholder='Email'
+                        inputStyle={{
+                            fontFamily: 'monospace'
+                        }}
+                        value={email}
+                        onChangeText={(value) => setEmail(value)}
+                        onBlur={() => {
+                            if (email.length > 0) {
+                                let patt = new RegExp('@');
+                                if (!patt.test(email)) {
+                                    setEmailError('Invalid email, must contain @');
+                                }
+                                else
+                                    setEmailError('');
+                            }
+                        }}
+                        errorMessage={emailError}
+                    />
+                }
+                <Icon
+                    name='angle-right'
+                    type='font-awesome'
+                    reverse
+                    raised
+                    color='#2dd1eb'
+                    onPress={otpSent ? () => handleLogin() : async () => {
+                        await AsyncStorage.getItem('users')
+                            .then((res) => {
+                                const users = JSON.parse(res);
+                                if (users.find((user) => user.email === email))
+                                    setOtpSent(true);
+                                else {
+                                    Alert.alert(
+                                        'User Not Found',
+                                        'No user found with this email!',
+                                        [
+                                            {
+                                                text: 'OK'
+                                            }
+                                        ]
+                                    );
+                                }
+                            })
+                            .catch((err) => console.log(err));
+                    }}
+                />
+            </View>
+            <View style={{ padding: 5, justifyContent: 'center' }}>
+                <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+                    <Text style={{ fontSize: 20, fontFamily: 'monospace' }}>Don't have an account?</Text>
+                    <Text style={{ fontSize: 20, fontFamily: 'monospace', color: '#2dd1eb', marginLeft: 20 }} onPress={() => navigation.navigate('signup')}>Sign Up</Text>
+                </View>
             </View>
         </View>
     );
