@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Dimensions, Alert } from 'react-native';
+import { View, Text, Dimensions, Alert, TextInput } from 'react-native';
 import { Button, Card, Input, Header } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -30,8 +30,12 @@ const Login = (props) => {
             noErr = false;
         }
 
+        let otpPatt = /^[0-9]+$/;
+        if (!otpPatt.test(otp)) {
+            setOtpError('OTP can only be numeric');
+            noErr = false;
+        }
         if (otp.length < 4 || otp.length > 4) {
-            setOtp('');
             setOtpError("OTP must be of 4 characters");
             noErr = false;
         }
@@ -99,20 +103,28 @@ const Login = (props) => {
                             if (!patt.test(email)) {
                                 setEmailError('Invalid email, must contain @');
                             }
+                            else
+                                setEmailError('');
                         }}
                         errorMessage={emailError}
                     />
                     {otpSent ? <View>
                         <Input
-                            keyboardType='number-pad'
+                            keyboardType='numeric'
                             placeholder='Enter OTP here'
                             value={otp}
+                            maxLength={4}
                             onChangeText={(value) => setOtp(value)}
                             onBlur={() => {
-                                if (otp.length < 4 || otp.length > 4) {
-                                    setOtpError('OTP must be of 4 numbers');
-                                    setOtp('');
+                                let patt = /^[0-9]+$/;
+                                if (!patt.test(otp)) {
+                                    setOtpError('OTP can only be numeric');
                                 }
+                                else if (otp.length < 4 || otp.length > 4) {
+                                    setOtpError('OTP must be of 4 numbers');
+                                }
+                                else
+                                    setOtpError('');
                             }}
                             errorMessage={otpError}
                         />

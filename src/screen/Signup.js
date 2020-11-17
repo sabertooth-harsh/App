@@ -53,6 +53,11 @@ const Signup = (props) => {
             noErr = false;
         }
 
+        let otpPatt = /^[0-9]+$/;
+        if (!otpPatt.test(otp)) {
+            setOtpError('OTP can only be numeric');
+            noErr = false;
+        }
         if (otp.length < 4 || otp.length > 4) {
             setOtp('');
             setOtpError("OTP must be of 4 characters");
@@ -107,7 +112,7 @@ const Signup = (props) => {
             <Header
                 {...props}
                 containerStyle={{ backgroundColor: 'white' }}
-                leftComponent={<Text {...props} style={{ fontSize: 40 }} onPress={() => navigation.goBack()}>{`<`}</Text>}
+                leftComponent={<Icon name='arrow-left' type='font-awesome' onPress={() => navigation.goBack()} />}
             />
             <View style={{ flex: 2, heigth: 500, width: SCREEN_WIDTH, backgroundColor: 'blue', justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={{ color: 'white', fontSize: 40, fontFamily: 'courier' }}>New User? Sign Up</Text>
@@ -138,11 +143,18 @@ const Signup = (props) => {
                         keyboardType='number-pad'
                         placeholder='OTP'
                         value={otp}
+                        maxLength={4}
                         onBlur={() => {
-                            if (otp.length < 4 || otp.length > 4) {
+                            let patt = /^[0-9]+$/;
+                            if (!patt.test(otp)) {
+                                setOtpError('OTP can only be numeric');
+                            }
+                            else if (otp.length < 4 || otp.length > 4) {
                                 setOtp('');
                                 setOtpError("OTP must be of 4 characters");
                             }
+                            else
+                                setOtpError('');
                         }}
                         onChangeText={(value) => setOtp(value)}
                         errorMessage={otpError}
