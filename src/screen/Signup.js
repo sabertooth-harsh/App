@@ -38,9 +38,9 @@ const Signup = (props) => {
     const validateForm = () => {
         let noErr = true;
 
-        let patt = new RegExp('@');
+        let patt = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
         if (!patt.test(email)) {
-            setEmailError('Invalid email, must contain @');
+            setEmailError('Invalid email');
             noErr = false;
         }
         if (email.length < 1) {
@@ -66,15 +66,7 @@ const Signup = (props) => {
 
 
         if (userList.find((user) => user.email === email)) {
-            Alert.alert(
-                'User Already Present',
-                'This email is already registered, please Login.',
-                [
-                    {
-                        text: 'OK'
-                    }
-                ]
-            );
+            setEmailError('User Already Present! Please Login.')
             setEmail('');
             noErr = false;
             return;
@@ -142,10 +134,12 @@ const Signup = (props) => {
                         onChangeText={(value) => setEmail(value)}
                         errorMessage={emailError}
                         onBlur={() => {
-                            let patt = new RegExp('@');
+                            let patt = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
                             if (!patt.test(email)) {
-                                setEmailError('Invalid email, must contain @');
+                                setEmailError('Invalid email');
                             }
+                            else
+                                setEmailError('');
                         }}
                     />
                     <Input

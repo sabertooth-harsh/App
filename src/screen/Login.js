@@ -20,9 +20,9 @@ const Login = (props) => {
     const validateForm = () => {
         let noErr = true;
 
-        let patt = new RegExp('@');
+        let patt = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
         if (!patt.test(email)) {
-            setEmailError('Invalid email, must contain @');
+            setEmailError('Invalid email');
             noErr = false;
         }
         if (email.length < 1) {
@@ -30,14 +30,16 @@ const Login = (props) => {
             noErr = false;
         }
 
-        let otpPatt = /^[0-9]+$/;
-        if (!otpPatt.test(otp)) {
-            setOtpError('OTP can only be numeric');
-            noErr = false;
-        }
-        if (otp.length < 4 || otp.length > 4) {
-            setOtpError("OTP must be of 4 characters");
-            noErr = false;
+        if (otpSent) {
+            let otpPatt = /^[0-9]+$/;
+            if (!otpPatt.test(otp)) {
+                setOtpError('OTP can only be numeric');
+                noErr = false;
+            }
+            if (otp.length < 4 || otp.length > 4) {
+                setOtpError("OTP must be of 4 characters");
+                noErr = false;
+            }
         }
 
         const matchOtp = async () => {
@@ -53,7 +55,8 @@ const Login = (props) => {
                 .catch((err) => console.log(err));
         }
 
-        matchOtp();
+        if (otpSent)
+            matchOtp();
 
         return !noErr;
     }
@@ -144,9 +147,9 @@ const Login = (props) => {
                         onChangeText={(value) => setEmail(value)}
                         onBlur={() => {
                             if (email.length > 0) {
-                                let patt = new RegExp('@');
+                                let patt = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
                                 if (!patt.test(email)) {
-                                    setEmailError('Invalid email, must contain @');
+                                    setEmailError('Invalid email');
                                 }
                                 else
                                     setEmailError('');
@@ -162,21 +165,16 @@ const Login = (props) => {
                     raised
                     color='#2dd1eb'
                     onPress={otpSent ? () => handleLogin() : async () => {
+                        if (validateForm())
+                            return;
+
                         await AsyncStorage.getItem('users')
                             .then((res) => {
                                 const users = JSON.parse(res);
                                 if (users.find((user) => user.email === email))
                                     setOtpSent(true);
                                 else {
-                                    Alert.alert(
-                                        'User Not Found',
-                                        'No user found with this email!',
-                                        [
-                                            {
-                                                text: 'OK'
-                                            }
-                                        ]
-                                    );
+                                    setEmailError('User Not Found');
                                 }
                             })
                             .catch((err) => console.log(err));
