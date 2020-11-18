@@ -66,7 +66,7 @@ const Login = (props) => {
             return;
 
         const handleLoggedUserFound = async (currentUser) => {
-            await AsyncStorage.setItem('loggedUser', currentUser.email)
+            await AsyncStorage.setItem('loggedUser', JSON.stringify(currentUser.email))
                 .then((res) => console.log('setLoggedUser', res))
                 .catch((err) => console.log(err));
 

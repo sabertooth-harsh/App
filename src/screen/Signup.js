@@ -13,13 +13,18 @@ const Signup = (props) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [otp, setOtp] = useState('');
+    const [phno, setPhno] = useState('');
+    const [address, setAddress] = useState('');
     const [nameError, setNameError] = useState(null);
     const [emailError, setEmailError] = useState(null);
     const [otpError, setOtpError] = useState(null);
+    const [phnoError, setPhnoError] = useState(null);
+    const [addressError, setAddressError] = useState(null);
 
     const [userList, setUserList] = useState([]);
 
     useEffect(() => {
+        //set next id on startup
         const fetchUsers = async () => {
             await AsyncStorage.getItem('users')
                 .then((response) => {
@@ -35,6 +40,7 @@ const Signup = (props) => {
         fetchUsers();
     }, []);
 
+    //form validation
     const validateForm = () => {
         let noErr = true;
 
@@ -83,7 +89,9 @@ const Signup = (props) => {
             id: id,
             name: name,
             email: email,
-            otp: otp
+            otp: otp,
+            phno: phno,
+            address: address
         };
 
         setUserList(userList.push(tempUserList));
@@ -109,7 +117,7 @@ const Signup = (props) => {
             <View style={{ flex: 1, width: SCREEN_WIDTH, backgroundColor: '#2dd1eb', justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={{ color: 'white', fontSize: 40, fontFamily: 'courier' }}>New User? Sign Up</Text>
             </View>
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 2 }}>
                 <View style={{ justifyContent: 'center', alignItems: 'center', borderBottomWidth: 1, padding: 7, borderRadius: 20 }}>
                     <Text style={{ fontSize: 40, fontFamily: 'courier' }}>Sign Up</Text>
                 </View>
@@ -141,6 +149,26 @@ const Signup = (props) => {
                             else
                                 setEmailError('');
                         }}
+                    />
+                    <Input
+                        style={{ margin: 5 }}
+                        placeholder='Contact No'
+                        value={phno}
+                        inputStyle={{
+                            fontFamily: 'monospace'
+                        }}
+                        onChangeText={(value) => setPhno(value)}
+                        errorMessage={phnoError}
+                    />
+                    <Input
+                        style={{ margin: 5 }}
+                        placeholder='Address'
+                        value={address}
+                        inputStyle={{
+                            fontFamily: 'monospace'
+                        }}
+                        onChangeText={(value) => setAddress(value)}
+                        errorMessage={addressError}
                     />
                     <Input
                         style={{ margin: 5 }}

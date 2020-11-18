@@ -6,12 +6,25 @@ import { useNavigation } from '@react-navigation/native';
 import ContactsTabNavigator from './ContactsTabNavigator';
 import HomeTabNavigator from './HomeTabNavigator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { add_user } from '../redux/actionCreators';
+import { connect } from 'react-redux';
+
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        add_user: (id, name, email, otp, phno, address) => dispatch(add_user(id, name, email, otp, phno, address))
+    }
+}
+
+const mapStateToProps = (state) => {
+    return {
+        user: state
+    }
+}
 
 const Tabs = createBottomTabNavigator();
 
 const homeTabScreen = ({ route, navigation }) => {
-    const email = route.params;
-    console.log('email in hometab: ', email);
     return (
         <HomeTabNavigator />
     );
@@ -25,15 +38,40 @@ const contactsTabScreen = ({ navigation }) => {
 function MainNavigator(props) {
     const navigation = useNavigation();
 
-    console.log('Main navigator: ', props);
-
     useEffect(() => {
-        const setLoggedUser = async () => {
-            await AsyncStorage.setItem('loggedUser', props.email)
-                .catch((err) => console.log(err));
-        };
+        //Get details of already logged user
+        const getLoggedUser = async () => {
 
-        setLoggedUser();
+            //First get email of already logged user
+            await AsyncStorage.getItem('loggedUser')
+                .then((response) => {
+                    const email = JSON.parse(response);
+                    console.log('logged user in main: ', email);
+                    //Get all details of logged user and add it to redux store
+                    const getLoggedUserDetails = async () => {
+                        let user = null;
+                        await AsyncStorage.getItem('users')
+                            .then((response) => {
+                                const users = JSON.parse(response);
+                                console.log('all users: ', users);
+                                user = users.find((us) => us.email === email);
+                                console.log('found user: ', user);
+                            })
+                            .catch((err) => console.log(err));
+
+                        //pass to add_user function
+                        await props.add_user(user.id, user.name, user.email, user.otp, user.phno, user.address);
+                    }
+
+                    getLoggedUserDetails();
+
+                })
+                .catch((err) => console.log(err));
+        }
+
+        getLoggedUser();
+
+        console.log('Data in store: ', props.user);
     }, []);
 
     return (
@@ -73,4 +111,4 @@ function MainNavigator(props) {
     );
 }
 
-export default MainNavigator;
+export default connect(mapStateToProps, mapDispatchToProps)(MainNavigator);

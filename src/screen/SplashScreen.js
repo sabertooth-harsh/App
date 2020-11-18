@@ -11,8 +11,8 @@ const SplashScreen = (props) => {
     useEffect(() => {
         const fetchUserData = async () => {
             const email = await AsyncStorage.getItem('loggedUser');
-            console.log(email);
-            navigation.navigate(email === null ? 'auth' : 'main', email);
+            console.log('Logged user found in Splash screen: ', email);
+            navigation.replace(email === null ? 'auth' : 'main');
         }
 
         setTimeout(() => {

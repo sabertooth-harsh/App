@@ -20,7 +20,6 @@ const authScreen = ({ navigation }) => {
 }
 const mainScreen = ({ route, navigation }) => {
     const email = route.params;
-    console.log('email in mainscreen', email);
     return (
         <MainNavigator email={email} />
     );
