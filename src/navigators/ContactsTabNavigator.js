@@ -4,45 +4,17 @@ import { Button, Header, Icon } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { createDrawerNavigator, DrawerItemList } from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { connect } from 'react-redux';
+import { CustomDrawerContentComponent } from '../components/CustomDrawerContentComponent';
+
+const mapStateToProps = (state) => {
+    return {
+        user: state.user
+    }
+}
 
 const ContactsTabDrawer = createDrawerNavigator();
 
-const CustomDrawerContentComponent = (props) => {
-    return (
-        <View style={{ flex: 1 }}>
-            <ScrollView {...props}>
-                <View style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
-                    <View style={styles.drawerHeader}>
-                        <View style={{ flex: 1, alignItems: "center" }}>
-                            <Text style={styles.drawerHeaderText}>Contacts</Text>
-                        </View>
-                    </View>
-                    <DrawerItemList {...props} />
-                </View>
-            </ScrollView>
-            <Button
-                containerStyle={{
-                    flex: 1,
-                    marginTop: 420,
-                    borderTopWidth: 1,
-                    borderRadius: 20
-                }}
-                buttonStyle={{
-                    backgroundColor: 'white'
-                }}
-                title='Sign Out'
-                titleStyle={{
-                    color: 'gray'
-                }}
-                onPress={async () => {
-                    await AsyncStorage.removeItem('loggedUser')
-                        .then(() => props.navigation.navigate('auth'))
-                        .catch((err) => console.log(err));
-                }}
-            />
-        </View>
-    );
-}
 
 const allContactsScreen = ({ navigation }) => {
 
@@ -75,13 +47,15 @@ const spamContactsScreen = ({ navigation }) => {
 
 function ContactsTabNavigator(props) {
 
+    const user = props.user;
+
     const navigation = useNavigation();
 
     return (
 
         <ContactsTabDrawer.Navigator
             style={{ marginTop: 40 }}
-            drawerContent={(props) => <CustomDrawerContentComponent {...props} navigation={navigation} />}
+            drawerContent={(props) => <CustomDrawerContentComponent {...props} navigation={navigation} user={user} />}
             screenOptions={{
                 headerShown: false
             }}
@@ -99,7 +73,7 @@ function ContactsTabNavigator(props) {
     );
 }
 
-export default ContactsTabNavigator;
+export default connect(mapStateToProps)(ContactsTabNavigator);
 
 const styles = StyleSheet.create({
     container: {
