@@ -70,6 +70,12 @@ const Signup = (props) => {
             noErr = false;
         }
 
+        let phnoPatt = /[789]\d{9}/g
+        if (!phnoPatt.test(phno)) {
+            setPhnoError('Invalid Phone Number');
+            noErr = false;
+        }
+
 
         if (userList.find((user) => user.email === email)) {
             setEmailError('User Already Present! Please Login.')
@@ -159,6 +165,14 @@ const Signup = (props) => {
                         }}
                         onChangeText={(value) => setPhno(value)}
                         errorMessage={phnoError}
+                        onBlur={() => {
+                            let phnoPatt = /[789]\d{9}/g
+                            if (!phnoPatt.test(phno)) {
+                                setPhnoError('Invalid Phone Number');
+                            }
+                            else
+                                setPhnoError('');
+                        }}
                     />
                     <Input
                         style={{ margin: 5 }}
