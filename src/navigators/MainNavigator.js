@@ -8,11 +8,12 @@ import HomeTabNavigator from './HomeTabNavigator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { add_user } from '../redux/actionCreators';
 import { connect } from 'react-redux';
+import UserTabScreen from '../screen/UserTabScreen';
 
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        add_user: (id, name, email, otp, phno, address) => dispatch(add_user(id, name, email, otp, phno, address))
+        add_user: (id, name, email, otp, phno, address, image) => dispatch(add_user(id, name, email, otp, phno, address, image))
     }
 }
 
@@ -32,6 +33,11 @@ const homeTabScreen = ({ route, navigation }) => {
 const contactsTabScreen = ({ navigation }) => {
     return (
         <ContactsTabNavigator />
+    );
+}
+const userTabScreen = ({ navigation }) => {
+    return (
+        <UserTabScreen />
     );
 }
 
@@ -60,7 +66,7 @@ function MainNavigator(props) {
                             .catch((err) => console.log(err));
 
                         //pass to add_user function
-                        await props.add_user(user.id, user.name, user.email, user.otp, user.phno, user.address);
+                        await props.add_user(user.id, user.name, user.email, user.otp, user.phno, user.address, user.image);
                     }
 
                     getLoggedUserDetails();
@@ -88,6 +94,10 @@ function MainNavigator(props) {
                             case 'contacts':
                                 icon = <Icon name='address-book' type='font-awesome' size={48} color={focused ? 'white' : 'gray'} />
                                 break;
+
+                            case 'userTab':
+                                icon = <Icon name='user' type='font-awesome' size={48} color={focused ? 'white' : 'gray'} />
+                                break;
                         }
 
                         return (
@@ -105,6 +115,10 @@ function MainNavigator(props) {
                 <Tabs.Screen
                     name='contacts'
                     component={contactsTabScreen}
+                />
+                <Tabs.Screen
+                    name='userTab'
+                    component={userTabScreen}
                 />
             </Tabs.Navigator>
         </View >

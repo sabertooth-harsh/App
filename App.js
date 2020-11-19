@@ -17,7 +17,8 @@ function App() {
         email: 'demo@demo.com',
         otp: '1234',
         phno: '1234567890',
-        address: 'Delhi'
+        address: 'Delhi',
+        image: null
       }
     ]
     const setDemoUser = async () => {

@@ -97,7 +97,8 @@ const Signup = (props) => {
             email: email,
             otp: otp,
             phno: phno,
-            address: address
+            address: address,
+            image: null
         };
 
         setUserList(userList.push(tempUserList));

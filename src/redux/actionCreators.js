@@ -1,13 +1,14 @@
 import * as actionTypes from './actionTypes';
 
-export const add_user = (id, name, email, otp, phno, address) => dispatch => {
+export const add_user = (id, name, email, otp, phno, address, image) => dispatch => {
     const user = {
         id: id,
         name: name,
         email: email,
         otp: otp,
         phno: phno,
-        address: address
+        address: address,
+        image: image
     }
     return dispatch(post_user(user));
 }

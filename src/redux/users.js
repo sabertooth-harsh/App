@@ -7,7 +7,8 @@ const userInfo = {
     email: '',
     otp: '',
     phno: '',
-    address: ''
+    address: '',
+    image: ''
 };
 
 export const userReducer = (state = { user: userInfo }, action) => {

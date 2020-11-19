@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View, Text, ScrollView, StyleSheet, Dimensions } from 'react-native';
+import { SafeAreaView, View, Text, ScrollView, StyleSheet, Dimensions, Image } from 'react-native';
 import { Button, Header, Icon } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { createDrawerNavigator, DrawerItemList } from '@react-navigation/drawer';
@@ -13,9 +13,12 @@ export const CustomDrawerContentComponent = (props) => {
                 <View style={{ flex: 1 }}>
                     <View style={{ flex: 1, height: 200, backgroundColor: '#2dd1eb', justifyContent: 'center' }}>
                         <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', justifyContent: 'center', padding: 10 }}>
-                            <Text style={{ fontFamily: 'courier', color: 'white', fontSize: 30 }}>Hi, </Text>
-                            <Text style={{ fontFamily: 'courier', fontSize: 30, color: 'white' }}>{props.user.name}</Text>
-                            <Icon name='user-o' type='font-awesome' style={{}} containerStyle={{ marginLeft: 'auto' }} color='#2dd1eb' reverse raised onPress={() => props.navigation.navigate('userProfile')} />
+                            {props.user.image === null ? <Icon name='user-o' type='font-awesome' style={{}} color='#2dd1eb' reverse raised onPress={() => props.navigation.navigate('userTab')} /> :
+                                <Image
+                                    style={{ height: 100, width: 100, borderRadius: 20 }}
+                                    source={{ uri: props.user.image }}
+                                    onPress={() => props.navigation.navigate('userProfile')}
+                                />}
                         </View>
                     </View>
                     <DrawerItemList {...props} />
