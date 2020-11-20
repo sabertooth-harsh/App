@@ -4,7 +4,7 @@ import { Button, Header, Icon } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { createDrawerNavigator, DrawerItemList } from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { connect } from 'react-redux';
+
 
 export const CustomDrawerContentComponent = (props) => {
     return (
