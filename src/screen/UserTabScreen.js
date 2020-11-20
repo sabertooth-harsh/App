@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Image, RefreshControl } from 'react-native';
 import { Header, Icon } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { connect } from 'react-redux';
@@ -21,38 +21,44 @@ const mapDispatchToProps = (dispatch) => {
 function UserProfile(props) {
     const navigation = useNavigation();
 
+    const apiUrl = 'https://randomuser.me/api/';
+
     const [loading, setLoading] = useState(true);
     const [animating, setAnimating] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
+
+    fetchAPI = async () => {
+
+        axios.get(apiUrl)
+            .then((response) => response.data)
+            .then((data) => {
+                const userData = data.results[0];
+
+                console.log('userData: ', userData);
+
+                const name = `${userData.name.title} ${userData.name.first} ${userData.name.last}`;
+                const email = userData.email;
+                const phno = userData.cell;
+                const address = `${userData.location.street.number} ${userData.location.street.name} ${userData.location.city} ${userData.location.state} ${userData.location.country}`
+                const picture = userData.picture.thumbnail;
+
+                props.add_random_user(props.user.id + 1, name, email, '1234', phno, address, picture);
+            })
+            .then(() => {
+                setLoading(false);
+                setAnimating(false);
+                setRefreshing(false);
+            })
+            .catch((err) => console.log(err));
+    }
 
     useEffect(() => {
-        const apiUrl = 'https://randomuser.me/api/';
-
-        fetchAPI = async () => {
-            axios.get(apiUrl)
-                .then((response) => response.data)
-                .then((data) => {
-                    const userData = data.results[0];
-
-                    console.log('userData: ', userData);
-
-                    const name = `${userData.name.title} ${userData.name.first} ${userData.name.last}`;
-                    const email = userData.email;
-                    const phno = userData.cell;
-                    const address = `${userData.location.street.number} ${userData.location.street.name} ${userData.location.city} ${userData.location.state} ${userData.location.country}`
-                    const picture = userData.picture.thumbnail;
-
-                    props.add_random_user(props.user.id + 1, name, email, '1234', phno, address, picture);
-                })
-                .then(() => {
-                    setLoading(false);
-                    setAnimating(false);
-                })
-                .catch((err) => console.log(err));
-        }
+        setLoading(true);
+        setAnimating(true);
 
         fetchAPI();
 
-    }, [setLoading, setAnimating]);
+    }, []);
 
     return (
         <View style={{ flex: 1 }}>
@@ -66,7 +72,16 @@ function UserProfile(props) {
                     color='#2dd1eb'
                     size='large'
                 />
-            </View> : <UserProfileComponent user={props.user} />}
+            </View> :
+                <ScrollView
+                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => {
+                        setRefreshing(true);
+                        fetchAPI();
+                    }} />}
+                >
+                    <UserProfileComponent user={props.user} />
+                </ScrollView>
+            }
         </View>
     );
 }

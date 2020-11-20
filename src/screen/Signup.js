@@ -3,6 +3,7 @@ import { ScrollView, View, Text, Dimensions, TextInput, Alert } from 'react-nati
 import { Button, Card, Input, Header, Icon } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ImagePicker from '../components/ImagePickerComponent';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -92,6 +93,8 @@ const Signup = (props) => {
         if (validateForm())
             return;
 
+        const profilePic = await AsyncStorage.getItem('profilePic');
+
         const tempUserList = {
             id: id,
             name: name,
@@ -99,7 +102,7 @@ const Signup = (props) => {
             otp: otp,
             phno: phno,
             address: address,
-            image: null
+            image: JSON.parse(profilePic).uri
         };
 
         setUserList(userList.push(tempUserList));
@@ -121,7 +124,17 @@ const Signup = (props) => {
             <Header
                 {...props}
                 containerStyle={{ backgroundColor: 'white' }}
-                leftComponent={<Icon color='#2dd1eb' name='angle-left' size={30} type='font-awesome' onPress={() => navigation.goBack()} />}
+                leftComponent={<Icon color='#2dd1eb' name='angle-left' size={30} type='font-awesome' onPress={() => {
+                    const picIsPresent = () => {
+                        const isPresent = AsyncStorage.getItem('profilePic');
+                        if (isPresent) {
+                            AsyncStorage.removeItem('profilePic');
+                        }
+                    }
+
+                    picIsPresent();
+                    navigation.goBack()
+                }} />}
             />
 
             <View style={{ flex: 1 }}>
@@ -135,6 +148,7 @@ const Signup = (props) => {
                             <Text style={{ fontSize: 40, fontFamily: 'courier' }}>Sign Up</Text>
                         </View>
                         <View>
+                            <ImagePicker />
                             <Input
                                 style={{ margin: 5 }}
                                 placeholder='Name'

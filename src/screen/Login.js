@@ -184,7 +184,18 @@ const Login = (props) => {
             <View style={{ padding: 5, justifyContent: 'center' }}>
                 <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
                     <Text style={{ fontSize: 20, fontFamily: 'monospace' }}>Don't have an account?</Text>
-                    <Text style={{ fontSize: 20, fontFamily: 'monospace', color: '#2dd1eb', marginLeft: 20 }} onPress={() => navigation.navigate('signup')}>Sign Up</Text>
+                    <Text style={{ fontSize: 20, fontFamily: 'monospace', color: '#2dd1eb', marginLeft: 20 }} onPress={() => {
+                        const picIsPresent = async () => {
+                            const isPresent = await AsyncStorage.getItem('profilePic');
+                            console.log('isPresent: ', isPresent);
+                            if (isPresent) {
+                                await AsyncStorage.removeItem('profilePic');
+                            }
+                        }
+
+                        picIsPresent();
+                        navigation.navigate('signup')
+                    }}>Sign Up</Text>
                 </View>
             </View>
         </View>

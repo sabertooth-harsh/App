@@ -119,6 +119,9 @@ function MainNavigator(props) {
                 <Tabs.Screen
                     name='userTab'
                     component={userTabScreen}
+                    options={{
+                        unmountOnBlur: true
+                    }}
                 />
             </Tabs.Navigator>
         </View >

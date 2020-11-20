@@ -31,7 +31,7 @@ const Auth = (props) => {
                 name='signup'
                 component={signupScreen}
                 options={{
-                    headerShown: false
+                    headerShown: false,
                 }}
             />
         </AuthStack.Navigator>
