@@ -11,14 +11,21 @@ const userInfo = {
     image: ''
 };
 
-export const userReducer = (state = { user: userInfo }, action) => {
+export const userReducer = (state = { user: userInfo, randomUser: userInfo }, action) => {
     switch (action.type) {
         case actionTypes.ADD_USER:
             return {
                 ...state,
-                user: action.payload
+                user: action.payload,
+                randomUser: state.randomUser
             };
 
+        case actionTypes.ADD_RANDOM_USER:
+            return {
+                ...state,
+                user: state.user,
+                randomUser: action.payload
+            };
         default:
             return state;
     }

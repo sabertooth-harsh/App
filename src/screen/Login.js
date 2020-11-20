@@ -20,6 +20,7 @@ const Login = (props) => {
     const validateForm = () => {
         let noErr = true;
 
+        setEmail(email.toLowerCase());
         let patt = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
         if (!patt.test(email)) {
             setEmailError('Invalid email');
@@ -76,10 +77,8 @@ const Login = (props) => {
         await AsyncStorage.getItem('users')
             .then((response) => {
                 const userArray = JSON.parse(response);
-                console.log('response', userArray);
                 if (userArray !== null) {
                     const currentUser = Object.values(userArray).find((user) => user.email === email && user.otp === otp);
-                    console.log('email', email, 'currentUser', currentUser);
                     currentUser === null || typeof (currentUser) === 'undefined' ? console.log("User not present", userArray) : handleLoggedUserFound(currentUser);
                 }
                 else
@@ -146,6 +145,7 @@ const Login = (props) => {
                         value={email}
                         onChangeText={(value) => setEmail(value)}
                         onBlur={() => {
+                            setEmail(email.toLowerCase());
                             if (email.length > 0) {
                                 let patt = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
                                 if (!patt.test(email)) {
@@ -171,7 +171,7 @@ const Login = (props) => {
                         await AsyncStorage.getItem('users')
                             .then((res) => {
                                 const users = JSON.parse(res);
-                                if (users.find((user) => user.email === email))
+                                if (users.find((user) => user.email === email.toLowerCase()))
                                     setOtpSent(true);
                                 else {
                                     setEmailError('User Not Found');

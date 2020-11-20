@@ -4,16 +4,16 @@ import { Header, Icon } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { add_user } from '../redux/actionCreators';
+import { add_random_user } from '../redux/actionCreators';
 
 const mapStateToProps = (state) => {
     return {
-        user: state.user
+        user: state.randomUser
     };
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        add_user: (id, name, email, otp, phno, address, image) => dispatch(add_user(id, name, email, otp, phno, address, image))
+        add_random_user: (id, name, email, otp, phno, address, image) => dispatch(add_random_user(id, name, email, otp, phno, address, image))
     }
 }
 
@@ -40,7 +40,7 @@ function UserProfile(props) {
                     const address = `${userData.location.street.number} ${userData.location.street.name} ${userData.location.city} ${userData.location.state} ${userData.location.country}`
                     const picture = userData.picture.thumbnail;
 
-                    props.add_user(props.user.id + 1, name, email, '1234', phno, address, picture);
+                    props.add_random_user(props.user.id + 1, name, email, '1234', phno, address, picture);
                 })
                 .then(() => {
                     setLoading(false);

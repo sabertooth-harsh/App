@@ -21,8 +21,7 @@ function UserProfile(props) {
                 centerComponent={<Text style={{ fontSize: 30, fontFamily: 'monospace', color: 'white' }}>Profile</Text>}
             />
             <View style={{ height: 150, flexDirection: 'row', padding: 20, justifyContent: 'center', alignItems: 'center' }}>
-                <Icon name='user-o' type='font-awesome' reverse containerStyle={{ marginRight: 'auto' }} color='gray' size={45} />
-                <Text style={{ fontSize: 50, fontFamily: 'courier', marginRight: 'auto' }}>Hi, {props.user.name}</Text>
+                <Icon name='user-o' type='font-awesome' reverse color='gray' size={50} />
             </View>
             <ScrollView style={{ padding: 20 }}>
                 <View style={styles.dataView}>
@@ -58,7 +57,7 @@ const styles = StyleSheet.create({
     },
     data: {
         marginTop: 5,
-        fontSize: 30,
+        fontSize: 25,
         fontFamily: 'courier',
         borderBottomWidth: 1,
     },

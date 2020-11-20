@@ -13,12 +13,16 @@ export const CustomDrawerContentComponent = (props) => {
                 <View style={{ flex: 1 }}>
                     <View style={{ flex: 1, height: 200, backgroundColor: '#2dd1eb', justifyContent: 'center' }}>
                         <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', justifyContent: 'center', padding: 10 }}>
-                            {props.user.image === null ? <Icon name='user-o' type='font-awesome' style={{}} color='#2dd1eb' reverse raised onPress={() => props.navigation.navigate('userTab')} /> :
-                                <Image
-                                    style={{ height: 100, width: 100, borderRadius: 20 }}
-                                    source={{ uri: props.user.image }}
-                                    onPress={() => props.navigation.navigate('userProfile')}
-                                />}
+                            {props.user.image === null ? <Icon name='user-o' type='font-awesome' style={{}} color='#2dd1eb' reverse raised onPress={() => props.navigation.navigate('userProfile')} /> :
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Image
+                                        style={{ height: 100, width: 100, borderRadius: 20 }}
+                                        source={{ uri: props.user.image }}
+                                        onPress={() => props.navigation.navigate('userProfile')}
+                                    />
+                                    <Icon name='user-o' type='font-awesome' style={{}} color='#2dd1eb' reverse raised onPress={() => props.navigation.navigate('userProfile')} />
+                                </View>
+                            }
                         </View>
                     </View>
                     <DrawerItemList {...props} />
