@@ -6,6 +6,7 @@ import { createDrawerNavigator, DrawerItemList } from '@react-navigation/drawer'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { connect } from 'react-redux';
 import { CustomDrawerContentComponent } from '../components/CustomDrawerContentComponent';
+import ContactsScreen from '../screen/ContactsScreen';
 
 const mapStateToProps = (state) => {
     return {
@@ -19,15 +20,7 @@ const ContactsTabDrawer = createDrawerNavigator();
 const allContactsScreen = ({ navigation }) => {
 
     return (
-        <View style={{ flex: 1 }}>
-            <Header
-                leftComponent={<Icon name='menu' color='white' size={35} onPress={() => navigation.toggleDrawer()} />}
-                centerComponent={<Text style={{ fontSize: 40, fontFamily: 'monospace', color: 'white' }}>Contacts</Text>}
-            />
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={{ fontSize: 30 }}>All Contacts will appear here</Text>
-            </View>
-        </View>
+        <ContactsScreen />
     );
 }
 const spamContactsScreen = ({ navigation }) => {
