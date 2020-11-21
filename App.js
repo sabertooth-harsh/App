@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useEffect } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, PermissionsAndroid, Platform } from 'react-native';
 import Main from './src/components/Main';
 import { NavigationContainer } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -27,6 +27,24 @@ function App() {
     }
 
     setDemoUser();
+
+    const takePermissions = async () => {
+      if (Platform.OS === 'android') {
+        PermissionsAndroid.requestMultiple(
+          [
+            PermissionsAndroid.PERMISSIONS.CAMERA,
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            PermissionsAndroid.PERMISSIONS.WRITE_CONTACTS,
+            PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+          ]
+        );
+      }
+      else
+        return;
+    }
+
+    takePermissions();
   }, []);
 
   return (

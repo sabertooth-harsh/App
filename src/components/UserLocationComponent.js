@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import { View, Text, ActivityIndicator, Platform, PermissionsAndroid } from 'react-native';
 import UserProfileComponent from './UserProfileComponent';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';

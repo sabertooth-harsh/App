@@ -41,23 +41,7 @@ function ContactsScreen(props) {
                 });
         };
 
-        if (Platform.OS === 'android') {
-            PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
-                title: 'Location',
-                message: 'This app would like to access your location'
-            }
-            );
-            PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
-                title: 'Contacts',
-                message: 'This app would like to view your contacts.',
-            }).then(() => {
-                loadContacts();
-            });
-        } else {
-            loadContacts();
-        }
+        loadContacts();
 
     }, []);
 
