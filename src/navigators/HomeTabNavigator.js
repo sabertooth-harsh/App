@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, View, Text, ScrollView, StyleSheet, Dimensions } from 'react-native';
+import { SafeAreaView, View, Text, ScrollView, StyleSheet, Dimensions, BackHandler, Alert } from 'react-native';
 import { Button, Header, Icon } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { createDrawerNavigator, DrawerItemList } from '@react-navigation/drawer';
@@ -51,6 +51,8 @@ function HomeTabNavigator(props) {
     console.log('hometabnavigator props: ', props);
 
     const user = props.user;
+
+
 
     return (
 

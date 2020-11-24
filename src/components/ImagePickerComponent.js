@@ -3,6 +3,7 @@ import { View, TouchableOpacity, Text, Image } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { add_user } from '../redux/actionCreators';
 
 
 export default class ImagePickerComponent extends Component {
@@ -10,7 +11,8 @@ export default class ImagePickerComponent extends Component {
         super(props);
         this.state = {
             isImageAvailable: false,
-            profilePic: null
+            profilePic: null,
+            user_id: props.user_id
         }
     }
 
@@ -19,12 +21,9 @@ export default class ImagePickerComponent extends Component {
     }
 
     getImage = async () => {
-        const profilePic = await AsyncStorage.getItem("profilePic");
+        const profilePic = await AsyncStorage.getItem(`user-${this.state.user_id}-profilePic`);
         if (profilePic) {
-            this.setState({
-                isImageAvailable: true,
-                profilePic: JSON.parse(profilePic)
-            });
+            await AsyncStorage.removeItem(`user-${this.state.user_id}-profilePic`);
         }
     }
 
@@ -51,7 +50,7 @@ export default class ImagePickerComponent extends Component {
 
                 // You can also display the image using data:
                 // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-                AsyncStorage.setItem("profilePic", JSON.stringify(source));
+                AsyncStorage.setItem(`user-${this.state.user_id}-profilePic`, JSON.stringify(source));
                 this.setState({
                     profilePic: source,
                     isImageAvailable: true

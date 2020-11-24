@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View, Text, ScrollView, StyleSheet, Dimensions, Image } from 'react-native';
+import { SafeAreaView, View, Text, ScrollView, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
 import { Button, Header, Icon } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { createDrawerNavigator, DrawerItemList } from '@react-navigation/drawer';
@@ -15,12 +15,13 @@ export const CustomDrawerContentComponent = (props) => {
                         <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', justifyContent: 'center', padding: 10 }}>
                             {props.user.image === null ? <Icon name='user-o' type='font-awesome' style={{}} color='#2dd1eb' reverse raised onPress={() => props.navigation.navigate('userProfile')} /> :
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <Image
-                                        style={{ height: 100, width: 100, borderRadius: 20 }}
-                                        source={{ uri: props.user.image }}
-                                        onPress={() => props.navigation.navigate('userProfile')}
-                                    />
-                                    <Icon name='user-o' type='font-awesome' style={{}} color='#2dd1eb' reverse raised onPress={() => props.navigation.navigate('userProfile')} />
+                                    <TouchableOpacity onPress={() => props.navigation.navigate('userProfile')}>
+                                        <Image
+                                            style={{ height: 100, width: 100, borderRadius: 20 }}
+                                            source={{ uri: props.user.image }}
+
+                                        />
+                                    </TouchableOpacity>
                                 </View>
                             }
                         </View>

@@ -47,35 +47,46 @@ function ContactsScreen(props) {
 
     const renderContact = ({ item }) => {
         return (
-            <View style={{ flex: 1, flexDirection: 'row', height: 75, padding: 5, borderWidth: 1, borderColor: 'gray', margin: 5, backgroundColor: 'white' }}>
-                <View style={{ flex: 4, padding: 4 }}>
-                    <Text style={{ fontWeight: 'bold', fontFamily: 'monospace', fontSize: 22 }}>{item.displayName}</Text>
-                    {item.emailAddresses.length > 0 ? <View style={{ flex: 1, flexDirection: 'row', padding: 5, paddingLeft: 0 }}>
-                        {item.phoneNumbers.length > 0 ? <Text style={{ opacity: 0.5, marginHorizontal: 10, fontSize: 15 }}>{item.phoneNumbers[0].number}</Text> : <></>}
-                        <Text style={{ opacity: 0.5, marginHorizontal: 10, fontSize: 15 }}>{item.emailAddresses[0].email}</Text>
-                    </View> : <View style={{ flex: 1, flexDirection: 'row', padding: 5, paddingLeft: 0 }}>
-                            {item.phoneNumbers.length > 0 ? <Text style={{ opacity: 0.5, marginHorizontal: 10, fontSize: 15 }}>{item.phoneNumbers[0].number}</Text> : <></>}
-                        </View>
-                    }
-                </View>
-                <View style={{ flex: 1, alignContent: 'center', justifyContent: 'center' }}>
-                    {item.hasThumbnail ? <Image
-                        style={{
-                            borderRadius: 10,
-                            height: 50,
-                            width: 50
-                        }}
-                        source={{ uri: item.thumbnailPath }}
-                    /> : <Icon containerStyle={{ alignSelf: 'center', alignContent: 'center' }} name='user' type='font-awesome' size={50} color='gray' />
-                    }
-                </View>
-            </View >
+            <Card containerStyle={{ margin: 0 }}>
+                <View style={{ flex: 1, flexDirection: 'row' }}>
+                    <View style={{ flex: 4, padding: 4 }}>
+                        <Text style={{ fontWeight: 'bold', fontFamily: 'monospace', fontSize: 22 }}>{item.displayName}</Text>
+                        <Card.Divider />
+                        {item.emailAddresses.length > 0 ? <View style={{ flex: 1, padding: 5, paddingLeft: 0 }}>
+                            {item.phoneNumbers.length > 0 ? <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+                                <Icon name='phone' type='font-awesome' color='#2dd1eb' size={15} /><Text style={{ opacity: 0.5, marginHorizontal: 10, fontSize: 15 }}>{item.phoneNumbers[0].number}</Text>
+                            </View> : <></>}
+                            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+                                <Icon name='envelope' type='font-awesome' color='#2dd1eb' size={15} />
+                                <Text style={{ opacity: 0.5, marginHorizontal: 10, fontSize: 15 }}>{item.emailAddresses[0].email}</Text>
+                            </View>
+                        </View> :
+                            <View style={{ flex: 1, flexDirection: 'row', padding: 5, paddingLeft: 0 }}>
+                                {item.phoneNumbers.length > 0 ? <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Icon name='phone' type='font-awesome' color='#2dd1eb' size={15} /><Text style={{ opacity: 0.5, marginHorizontal: 10, fontSize: 15 }}>{item.phoneNumbers[0].number}</Text>
+                                </View> : <></>}
+                            </View>
+                        }
+                    </View>
+                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                        {item.hasThumbnail ? <Image
+                            style={{
+                                borderRadius: 10,
+                                height: 60,
+                                width: 60
+                            }}
+                            source={{ uri: item.thumbnailPath }}
+                        /> : <Icon containerStyle={{}} name='user' type='font-awesome' size={50} color='gray' />
+                        }
+                    </View>
+                </View >
+            </Card>
         );
     }
 
 
     return (
-        <View style={{ flex: 1, backgroundColor: '#2dd1eb' }}>
+        <View style={{ flex: 1 }}>
             <Header
                 leftComponent={<Icon name='menu' color='white' size={35} onPress={() => navigation.toggleDrawer()} />}
                 centerComponent={<Text style={{ fontSize: 40, fontFamily: 'monospace', color: 'white' }}>Contacts</Text>}

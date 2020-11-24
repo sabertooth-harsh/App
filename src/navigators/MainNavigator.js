@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, BackHandler } from 'react-native';
 import { Button, Header, Icon } from 'react-native-elements';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
@@ -44,6 +44,11 @@ const userTabScreen = ({ navigation }) => {
 function MainNavigator(props) {
     const navigation = useNavigation();
 
+    const backAction = () => {
+        BackHandler.exitApp();
+    };
+
+
     useEffect(() => {
         //Get details of already logged user
         const getLoggedUser = async () => {
@@ -76,6 +81,14 @@ function MainNavigator(props) {
         }
 
         getLoggedUser();
+
+
+
+        BackHandler.addEventListener("hardwareBackPress", backAction);
+
+        return () =>
+            BackHandler.removeEventListener("hardwareBackPress", backAction);
+
 
         console.log('Data in store: ', props.user);
     }, []);

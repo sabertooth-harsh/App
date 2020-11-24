@@ -9,9 +9,9 @@ function UserLocationComponent(props) {
     const [loading, setLoading] = useState(true);
     const [location, setLocation] = useState('');
 
-    const api_key = '4bbbadb711f34b7a84d4dc540202384f';
+    const api_key = 't1WEtKDuZJnNqbGMbpFdyrUrng3p2MAw';
 
-    const baseUrl = 'https://api.opencagedata.com/geocode/v1/json?q=';
+    const baseUrl = 'http://open.mapquestapi.com/geocoding/v1/reverse?key=';
 
     useEffect(() => {
 
@@ -20,18 +20,16 @@ function UserLocationComponent(props) {
             Geolocation.getCurrentPosition(pos => {
                 console.log(pos)
 
-                let url = `${baseUrl}${pos.coords.latitude}+${pos.coords.longitude}&key=${api_key}`;
+                let url = `${baseUrl}${api_key}&location=${pos.coords.latitude},${pos.coords.longitude}`;
 
                 axios.get(url)
                     .then((response) => response.data)
                     .then((data) => {
-                        console.log('data: ', data.results[0].components);
+                        console.log('data: ', data.results[0].locations[0]);
 
-                        const dataComp = data.results[0].components;
+                        const loc = data.results[0].locations[0];
 
-                        const type = dataComp._type;
-
-                        setLocation(`${dataComp.state}, ${dataComp.country}`);
+                        setLocation(`${loc.street} ${loc.adminArea6} ${loc.adminArea5} ${loc.adminArea3} ${loc.adminArea1} ${loc.postalCode}`);
                         console.log('location: ', location);
                         setLoading(false);
                     })
@@ -52,7 +50,7 @@ function UserLocationComponent(props) {
                     color='blue'
                 />
             </View> : <View style={{ alignItems: 'center', backgroundColor: 'white' }}>
-                    <Text style={{ fontSize: 30, fontFamily: 'courier' }}>{location}</Text>
+                    <Text style={{ textAlign: 'center', fontSize: 30, fontFamily: 'courier' }}>{location}</Text>
                 </View>
             }
         </View>

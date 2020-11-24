@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, View, Text, Dimensions, TextInput, Alert } from 'react-native';
+import { ScrollView, View, Text, Dimensions, TextInput, Alert, ActivityIndicator } from 'react-native';
 import { Button, Card, Input, Header, Icon } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -9,6 +9,8 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const Signup = (props) => {
     const navigation = useNavigation();
+
+    const [loadingUserId, setLoadingUserId] = useState(true);  //Load user id in useEffect() to pass it to ImagePicker
 
     const [id, setId] = useState(0);
     const [name, setName] = useState('');
@@ -34,6 +36,9 @@ const Signup = (props) => {
                     console.log('users: ', users);
                     setUserList(users);
                     console.log('userList: ', userList);
+                })
+                .then(() => {
+                    setLoadingUserId(false);
                 })
                 .catch((err) => console.log(err));
         }
@@ -93,7 +98,8 @@ const Signup = (props) => {
         if (validateForm())
             return;
 
-        const profilePic = await AsyncStorage.getItem('profilePic');
+        const profilePic = await AsyncStorage.getItem(`user-${id}-profilePic`);
+
 
         const tempUserList = {
             id: id,
@@ -102,7 +108,7 @@ const Signup = (props) => {
             otp: otp,
             phno: phno,
             address: address,
-            image: JSON.parse(profilePic).uri
+            image: (profilePic ? JSON.parse(profilePic).uri : null)
         };
 
         setUserList(userList.push(tempUserList));
@@ -126,9 +132,9 @@ const Signup = (props) => {
                 containerStyle={{ backgroundColor: 'white' }}
                 leftComponent={<Icon color='#2dd1eb' name='angle-left' size={30} type='font-awesome' onPress={() => {
                     const picIsPresent = () => {
-                        const isPresent = AsyncStorage.getItem('profilePic');
+                        const isPresent = AsyncStorage.getItem(`user-${id}-profilePic`);
                         if (isPresent) {
-                            AsyncStorage.removeItem('profilePic');
+                            AsyncStorage.removeItem(`user-${id}-profilePic`);
                         }
                     }
 
@@ -148,7 +154,7 @@ const Signup = (props) => {
                             <Text style={{ fontSize: 40, fontFamily: 'courier' }}>Sign Up</Text>
                         </View>
                         <View>
-                            <ImagePicker />
+                            {loadingUserId ? <ActivityIndicator size='large' animating={true} color='#2dd1eb' /> : <ImagePicker user_id={id} />}
                             <Input
                                 style={{ margin: 5 }}
                                 placeholder='Name'
